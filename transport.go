@@ -11,7 +11,6 @@ import (
 	"net/url"
 	"strings"
 	"time"
-	"log"
 )
 
 const typeJSON = "application/json"
