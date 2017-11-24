@@ -17,30 +17,33 @@ type User struct {
     OAPIResponse
     DingID string `json:"dingId"`
 	UnionID string `json:"unionid"`
+	OpenID string `json:"openId"`
     UserID string `json:"userid"`
     Name string
 
     Active bool
 
+	StateCode string `json:"stateCode"` // 手机号国家码
     Mobile string
     Tel string
-    IsHide bool
+    IsHide bool // 是否号码隐藏, true表示隐藏, false表示不隐藏。隐藏手机号后，手机号在个人资料页隐藏，但仍可对其发DING、发起钉钉免费商务电话。
 
+	Avatar string
     Workplace string
 	Email string
 	OrgEmail string
+	Position string
 
     Remark string
-    Order int
     IsAdmin bool
     IsBoss bool
+    IsSenior bool // 是否高管模式，true表示是，false表示不是。开启后，手机号码对所有员工隐藏。普通员工无法对其发DING、发起钉钉免费商务电话。高管之间不受影响。
 	Departments []int `json:"department"`
-    IsLeaderInDepts map[int]string
-	OrderInDepts map[int]int
-	IsSys bool `json:"is_sys"`
-	SysLevel int `json:"sys_level"`
-    Position string
-    Avatar string
+	// TODO: parse
+    // IsLeaderInDepts map[int]string
+	// OrderInDepts map[int]int
+	IsLeaderInDepts string
+	OrderInDepts string
 
     Extattr interface{}
 
