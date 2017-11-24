@@ -139,12 +139,12 @@ func (c *DingTalkClient) CreateChat(name string, owner string, useridlist []stri
     return data.Chatid, err
 }
 
-func (c *DingTalkClient) UserDetail(id string) (User, error) {
+func (c *DingTalkClient) UserDetail(id string) (*User, error) {
 	var user User
 	params := url.Values{}
 	params.Add("userid", id)
-	err :=c.httpRPC("user/get", params, nil, &user)
-	return user, err
+	err := c.httpRPC("user/get", params, nil, &user)
+	return &user, err
 }
 
 type UserInfo struct {
