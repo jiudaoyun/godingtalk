@@ -39,7 +39,7 @@ type User struct {
     IsBoss bool
     IsSenior bool // 是否高管模式，true表示是，false表示不是。开启后，手机号码对所有员工隐藏。普通员工无法对其发DING、发起钉钉免费商务电话。高管之间不受影响。
 	Departments []int `json:"department"`
-	// TODO: parse
+	// TODO: parse, by self or otto?
     // IsLeaderInDepts map[int]string
 	// OrderInDepts map[int]int
 	IsLeaderInDepts string
@@ -110,12 +110,12 @@ func (c *DingTalkClient) DepartmentList() (DepartmentList, error) {
 }
 
 //DepartmentDetail is 获取部门详情
-func (c *DingTalkClient) DepartmentDetail(id int) (Department, error) {
+func (c *DingTalkClient) DepartmentDetail(id int) (*Department, error) {
     var data Department
     params := url.Values{}
     params.Add("id", fmt.Sprintf("%d", id))
     err :=c.httpRPC("department/get", params, nil, &data)
-    return data, err
+    return &data, err
 }
 
 //UserList is 获取部门成员
