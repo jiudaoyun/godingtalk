@@ -148,12 +148,12 @@ func (c *DingTalkClient) UserDetail(id string) (User, error) {
 }
 
 //UserInfoByCode 校验免登录码并换取用户身份
-func (c *DingTalkClient) UserInfoByCode(code string) (User, error) {
+func (c *DingTalkClient) UserInfoByCode(code string) (*User, error) {
     var data User
     params := url.Values{}
     params.Add("code", code)
-    err :=c.httpRPC("user/getuserinfo", params, nil, &data)
-    return data, err
+    err := c.httpRPC("user/getuserinfo", params, nil, &data)
+    return &data, err
 }
 
 //UseridByUnionId 通过UnionId获取玩家Userid

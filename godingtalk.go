@@ -175,7 +175,7 @@ func (c *DingTalkClient) GetConfig(nonceStr string, timestamp string, url string
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("jsapi config: {\"noncestr\":\"%s\",\"timestamp\":\"%s\",\"url\":\"%s\",\"jsapi_ticket\":\"%s\"}", nonceStr, timestamp, url, ticket)
+	fmt.Printf("jsapi config: {\"noncestr\":\"%s\",\"timestamp\":\"%s\",\"url\":\"%s\",\"jsapi_ticket\":\"%s\"}\n", nonceStr, timestamp, url, ticket)
 	return map[string]string{
 		"nonceStr":  nonceStr,
 		"agentId":   c.AgentID,
