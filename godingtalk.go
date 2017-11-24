@@ -1,20 +1,19 @@
 package godingtalk
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
 	"time"
+	"sync"
 )
 
 const (
-	//VERSION is SDK version
 	VERSION = "0.1"
 
-	//ROOT is the root url
-	ROOT = "https://oapi.dingtalk.com/"
+	BASE_URL = "https://oapi.dingtalk.com/"
+	TAOBAO_BASE_URL   = "https://eco.taobao.com/router/rest"
 )
 
 //DingTalkClient is the Client to access DingTalk Open API
@@ -25,6 +24,7 @@ type DingTalkClient struct {
 	AccessToken string
 	HTTPClient  *http.Client
 	Cache       Cache
+	*sync.RWMutex
 
 	//社交相关的属性
 	SnsAppID string
@@ -44,6 +44,15 @@ type OAPIResponse struct {
 	ErrMsg  string `json:"errmsg"`
 }
 
+type TaobaoOAPIResponse struct {
+	ErrorResponse struct {
+		SubMsg  string `json:"sub_msg"`
+		Code    int
+		SubCode string `json:"sub_code"`
+		Msg     string
+	} `json:"error_response"`
+}
+
 func (data *OAPIResponse) checkError() (err error) {
 	if data.ErrCode != 0 {
 		err = fmt.Errorf("%d: %s", data.ErrCode, data.ErrMsg)
@@ -52,6 +61,18 @@ func (data *OAPIResponse) checkError() (err error) {
 }
 
 func (data *OAPIResponse) getWriter() io.Writer {
+	return nil
+}
+
+func (data *TaobaoOAPIResponse) checkError() (err error) {
+	errData := data.ErrorResponse
+	if errData.Code != 0 {
+		err = fmt.Errorf("code: %d, msg: %s, sub_code: %s, sub_msg: %s", errData.Code, errData.Msg, errData.SubCode, errData.SubMsg)
+	}
+	return err
+}
+
+func (data *TaobaoOAPIResponse) getWriter() io.Writer {
 	return nil
 }
 
@@ -100,17 +121,24 @@ func NewDingTalkClient(corpID string, corpSecret string) *DingTalkClient {
 		Timeout: 10 * time.Second,
 	}
 	c.Cache = NewFileCache(".auth_file")
+	c.RWMutex = &sync.RWMutex{}
 	return c
 }
 
 //RefreshAccessToken is to get a valid access token
 func (c *DingTalkClient) RefreshAccessToken() error {
+	c.RLock()
 	var data AccessTokenResponse
 	err := c.Cache.Get(&data)
 	if err == nil {
 		c.AccessToken = data.AccessToken
+		c.RUnlock()
 		return nil
 	}
+	c.RUnlock()
+
+	c.Lock()
+	defer c.Unlock()
 
 	params := url.Values{}
 	params.Add("corpid", c.CorpID)
@@ -142,19 +170,18 @@ func (c *DingTalkClient) GetJsAPITicket() (ticket string, err error) {
 }
 
 //GetConfig is to return config in json
-func (c *DingTalkClient) GetConfig(nonceStr string, timestamp string, url string) string {
-	ticket, _ := c.GetJsAPITicket()
-	config := map[string]string{
-		"url":       url,
+func (c *DingTalkClient) GetConfig(nonceStr string, timestamp string, url string) (map[string]string, error) {
+	ticket, err := c.GetJsAPITicket()
+	if err != nil {
+		return nil, err
+	}
+	return map[string]string{
 		"nonceStr":  nonceStr,
 		"agentId":   c.AgentID,
 		"timeStamp": timestamp,
 		"corpId":    c.CorpID,
-		"ticket":    ticket,
 		"signature": Sign(ticket, nonceStr, timestamp, url),
-	}
-	bytes, _ := json.Marshal(&config)
-	return string(bytes)
+	}, nil
 }
 
 //Sign is 签名
