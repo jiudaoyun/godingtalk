@@ -147,9 +147,17 @@ func (c *DingTalkClient) UserDetail(id string) (User, error) {
 	return user, err
 }
 
+type UserInfo struct {
+	OAPIResponse
+	UserID string `json:"userid"`
+	DeviceID string `json:"deviceId"`
+	IsSys bool `json:"is_sys"`
+	SysLevel bool `json:"sys_level"`
+}
+
 //UserInfoByCode 校验免登录码并换取用户身份
-func (c *DingTalkClient) UserInfoByCode(code string) (*User, error) {
-    var data User
+func (c *DingTalkClient) UserInfoByCode(code string) (*UserInfo, error) {
+    var data UserInfo
     params := url.Values{}
     params.Add("code", code)
     err := c.httpRPC("user/getuserinfo", params, nil, &data)
