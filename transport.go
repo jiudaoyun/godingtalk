@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"strings"
 	"time"
+	"fmt"
 )
 
 const typeJSON = "application/json"
@@ -113,6 +114,7 @@ func (c *DingTalkClient) httpRequest(path string, params url.Values, requestData
 	pos := len(typeJSON)
 	if len(contentType) >= pos && contentType[0:pos] == typeJSON {
 		content, err := ioutil.ReadAll(resp.Body)
+		fmt.Printf("response: %s", content)
 		if err == nil {
 			json.Unmarshal(content, responseData)
 			return responseData.checkError()
