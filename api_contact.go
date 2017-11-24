@@ -152,7 +152,7 @@ type UserInfo struct {
 	UserID string `json:"userid"`
 	DeviceID string `json:"deviceId"`
 	IsSys bool `json:"is_sys"`
-	SysLevel bool `json:"sys_level"`
+	SysLevel int `json:"sys_level"`
 }
 
 //UserInfoByCode 校验免登录码并换取用户身份
