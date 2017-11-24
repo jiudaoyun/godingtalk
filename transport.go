@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"strings"
 	"time"
+	"log"
 )
 
 const typeJSON = "application/json"
@@ -84,7 +85,7 @@ func (c *DingTalkClient) httpRequest(path string, params url.Values, requestData
 				request.Header.Set("Content-Type", w.FormDataContentType())
 			default:
 				d, _ := json.Marshal(requestData)
-				// log.Printf("url: %s request: %s", url, string(d))
+				log.Printf("url: %s request: %s", url, string(d))
 				request, _ = http.NewRequest("POST", url, bytes.NewReader(d))
 				request.Header.Set("Content-Type", typeJSON)
 			}
