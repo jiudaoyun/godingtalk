@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"time"
+	"os"
+	"path"
 )
 
 type Expirable interface {
@@ -23,9 +25,9 @@ type FileCache struct {
 	Path string
 }
 
-func NewFileCache(path string) *FileCache {
+func NewFileCache(filename string) *FileCache {
 	return &FileCache{
-		Path: path,
+		Path: path.Join(os.TempDir(), filename),
 	}
 }
 
