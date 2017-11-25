@@ -77,6 +77,7 @@ type DepartmentList struct {
 }
 
 type ExternalUser struct {
+	UserID string `json:"userId"`
 	Name string
 	Mobile string
 	Follower string `json:"follower_userid"` // 负责人userId
@@ -199,7 +200,8 @@ func (c *DingTalkClient) CreateExternalUser(euser *ExternalUser) (userID string,
 	if err != nil {
 		return "", err
 	}
-	return rep.DingtalkCorpExtAddResponse.UserID, nil
+	euser.UserID = rep.DingtalkCorpExtAddResponse.UserID
+	return euser.UserID, nil
 }
 
 func (c *DingTalkClient) ExternalUserList(offset, size int) ([]ExternalUser, error) {
