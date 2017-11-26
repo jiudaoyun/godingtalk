@@ -207,8 +207,8 @@ func (c *DingTalkClient) CreateExternalUser(euser *ExternalUser) (userID string,
 func (c *DingTalkClient) ExternalUserList(offset, size int) ([]ExternalUser, error) {
 	type User struct {
 		UserID string `json:"userId"`
-		Name string
-		Mobile string
+		Name string `json:"name"`
+		Mobile string `json:"mobile"`
 		Follower string `json:"followerUserId"`
 		Labels []int `json:"labelIds"`
 		StateCode string `json:"stateCode"`
