@@ -274,6 +274,7 @@ func (c *DingTalkClient) ExternalUserLabelGroups(offset, size int) ([]ExternalUs
 	if err != nil {
 		return nil, err
 	}
+	fmt.Printf("labels: %s\n", rep.Result)
 	var result []ExternalUserLabelGroup
 	err = json.Unmarshal([]byte(rep.Result), &result)
 	if err != nil {
