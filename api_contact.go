@@ -235,7 +235,7 @@ func (c *DingTalkClient) ExternalUserList(offset, size int) ([]ExternalUser, err
 		return nil, err
 	}
 	fmt.Printf("result: %q\n", rep.Result)
-	err = json.Unmarshal(rep.Result, &users)
+	err = json.Unmarshal([]byte(rep.Result), &users)
 	if err != nil {
 		return nil, err
 	}
