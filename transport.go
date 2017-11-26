@@ -98,6 +98,7 @@ func (c *DingTalkClient) httpRequest(path string, params url.Values, requestData
 		buf := strings.NewReader(params.Encode())
 		request, _ = http.NewRequest("POST", TAOBAO_BASE_URL, buf)
 		request.Header.Set("Content-Type", typeFormURLEncoded)
+		fmt.Printf("req: %s\n", buf)
 	}
 
 	resp, err := client.Do(request)
