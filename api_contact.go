@@ -78,16 +78,16 @@ type DepartmentList struct {
 
 type ExternalUser struct {
 	UserID string `json:"userId"`
-	Name string
-	Mobile string
+	Name string `json:"name"`
+	Mobile string `json:"mobile"`
 	Follower string `json:"follower_userid"` // 负责人userId
 	Labels []int `json:"label_ids"` // 标签列表
 	StateCode string `json:"state_code"` // 手机号国家码
 	Company string `json:"company_name,omitempty"`
-	Title string `json:",omitempty"`
-	Email string `json:",omitempty"`
-	Address string `json:",omitempty"`
-	Remark string `json:",omitempty"`
+	Title string `json:"title,omitempty"`
+	Email string `json:"email,omitempty"`
+	Address string `json:"address,omitempty"`
+	Remark string `json:"remark,omitempty"`
 	SharedUsers []string `json:"share_userids,omitempty"` // 共享给的员工userId列表
 	SharedDepts []int `json:"share_deptids,omitempty"` // 共享给的部门ID
 }
