@@ -224,7 +224,7 @@ func (c *DingTalkClient) ExternalUserList(offset, size int) ([]ExternalUser, err
 
 	var rep struct{
 		TaobaoOAPIResponse
-		Result []byte
+		Result string
 	}
 
 	params := url.Values{}
