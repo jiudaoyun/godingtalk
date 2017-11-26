@@ -93,14 +93,14 @@ type ExternalUser struct {
 }
 
 type ExternalUserLabel struct {
-	ID int
-	Name string
+	ID int `json:"id"`
+	Name string `json:"name"`
 }
 
 type ExternalUserLabelGroup struct {
-	Color int
-	Name string
-	Labels []ExternalUserLabel
+	Color int `json:"code"`
+	Name string `json:"name"`
+	Labels []ExternalUserLabel `json:"labels"`
 }
 
 // DepartmentList is 获取部门列表
