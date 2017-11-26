@@ -226,6 +226,7 @@ func (c *DingTalkClient) ExternalUserList(offset, size int) ([]ExternalUser, err
 		TaobaoOAPIResponse
 		Result []byte
 	}
+	fmt.Printf("result: %q", rep.Result)
 
 	params := url.Values{}
 	params.Add("size", strconv.Itoa(size))
