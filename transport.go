@@ -109,8 +109,9 @@ func (c *DingTalkClient) httpRequest(path string, params url.Values, requestData
 	}
 
 	defer resp.Body.Close()
+
 	contentType := resp.Header.Get("Content-Type")
-	fmt.Printf("response content type: %s", contentType)
+	fmt.Printf("response content type: %s\n", contentType)
 	pos := len(typeJSON)
 	if len(contentType) >= pos && contentType[0:pos] == typeJSON {
 		content, err := ioutil.ReadAll(resp.Body)
@@ -120,7 +121,10 @@ func (c *DingTalkClient) httpRequest(path string, params url.Values, requestData
 			return responseData.checkError()
 		}
 	} else {
-		io.Copy(responseData.getWriter(), resp.Body)
+		buf := bytes.Buffer{}
+		// io.Copy(responseData.getWriter(), resp.Body)
+		io.Copy(&buf, resp.Body)
+		fmt.Printf("response: %s\n", buf.String())
 		return responseData.checkError()
 	}
 	return err
