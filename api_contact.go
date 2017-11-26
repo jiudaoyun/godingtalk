@@ -226,7 +226,6 @@ func (c *DingTalkClient) ExternalUserList(offset, size int) ([]ExternalUser, err
 		TaobaoOAPIResponse
 		Result []byte
 	}
-	fmt.Printf("result: %q", rep.Result)
 
 	params := url.Values{}
 	params.Add("size", strconv.Itoa(size))
@@ -235,6 +234,7 @@ func (c *DingTalkClient) ExternalUserList(offset, size int) ([]ExternalUser, err
 	if err != nil {
 		return nil, err
 	}
+	fmt.Printf("result: %q\n", rep.Result)
 	err = json.Unmarshal(rep.Result, &users)
 	if err != nil {
 		return nil, err
