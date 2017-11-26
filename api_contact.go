@@ -234,9 +234,9 @@ func (c *DingTalkClient) ExternalUserList(offset, size int) ([]ExternalUser, err
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("result: %q\n", rep.Result)
+	// fmt.Printf("result: %q\n", rep.Result)
 	err = json.Unmarshal([]byte(rep.Result), &users)
-	fmt.Printf("users: %v\n", users)
+	// fmt.Printf("users: %v\n", users)
 	if err != nil {
 		return nil, err
 	}
@@ -261,12 +261,10 @@ func (c *DingTalkClient) ExternalUserList(offset, size int) ([]ExternalUser, err
 	return eusers, nil
 }
 
-func (c *DingTalkClient) ExternalUserLabelGroups(offset, size int) ([]ExternalUserLabel, error) {
+func (c *DingTalkClient) ExternalUserLabelGroups(offset, size int) ([]ExternalUserLabelGroup, error) {
 	var rep struct{
 		TaobaoOAPIResponse
-		DingtalkCorpExtListLabelGroupsResponse struct{
-			Result []ExternalUserLabel
-		} `json:"dingtalk_corp_ext_listlabelgroups_response"`
+		Result string
 	}
 
 	params := url.Values{}
@@ -276,5 +274,10 @@ func (c *DingTalkClient) ExternalUserLabelGroups(offset, size int) ([]ExternalUs
 	if err != nil {
 		return nil, err
 	}
-	return rep.DingtalkCorpExtListLabelGroupsResponse.Result, nil
+	var result []ExternalUserLabelGroup
+	err = json.Unmarshal([]byte(rep.Result), &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }
