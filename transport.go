@@ -15,6 +15,7 @@ import (
 )
 
 const typeJSON = "application/json"
+const typeJS = "text/javascript"
 const typeFormURLEncoded = "application/x-www-form-urlencoded;charset=utf-8"
 
 //UploadFile is for uploading a single file to DingTalk
@@ -112,8 +113,7 @@ func (c *DingTalkClient) httpRequest(path string, params url.Values, requestData
 
 	contentType := resp.Header.Get("Content-Type")
 	fmt.Printf("response content type: %s\n", contentType)
-	pos := len(typeJSON)
-	if len(contentType) >= pos && contentType[0:pos] == typeJSON {
+	if strings.HasPrefix(contentType, typeJSON) || strings.HasPrefix(contentType, typeJS) {
 		content, err := ioutil.ReadAll(resp.Body)
 		fmt.Printf("response: %s\n", content)
 		if err == nil {

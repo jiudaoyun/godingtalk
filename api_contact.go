@@ -205,11 +205,26 @@ func (c *DingTalkClient) CreateExternalUser(euser *ExternalUser) (userID string,
 }
 
 func (c *DingTalkClient) ExternalUserList(offset, size int) ([]ExternalUser, error) {
+	type User struct {
+		UserID string `json:"userId"`
+		Name string
+		Mobile string
+		Follower string `json:"followerUserId"`
+		Labels []int `json:"labelIds"`
+		StateCode string `json:"stateCode"`
+		Company string `json:"companyName"`
+		Title string
+		Email string
+		Address string
+		Remark string
+		SharedUsers []string `json:"shareUserIds"`
+		SharedDepts []int `json:"shareDeptIds"`
+	}
+	var users []User
+
 	var rep struct{
 		TaobaoOAPIResponse
-		DingtalkCorpExtListResponse struct{
-			Result []ExternalUser
-		} `json:"dingtalk_corp_ext_list_response"`
+		Result []byte
 	}
 
 	params := url.Values{}
@@ -219,7 +234,29 @@ func (c *DingTalkClient) ExternalUserList(offset, size int) ([]ExternalUser, err
 	if err != nil {
 		return nil, err
 	}
-	return rep.DingtalkCorpExtListResponse.Result, nil
+	err = json.Unmarshal(rep.Result, &users)
+	if err != nil {
+		return nil, err
+	}
+	eusers := make([]ExternalUser, len(users))
+	for i, user := range users {
+		eusers[i] = ExternalUser{
+			UserID: user.UserID,
+			Name: user.Name,
+			Mobile: user.Mobile,
+			Follower: user.Follower,
+			Labels: user.Labels,
+			StateCode: user.StateCode,
+			Company: user.Company,
+			Title: user.Title,
+			Email: user.Email,
+			Address: user.Address,
+			Remark: user.Remark,
+			SharedUsers:user.SharedUsers,
+			SharedDepts: user.SharedDepts,
+		}
+	}
+	return eusers, nil
 }
 
 func (c *DingTalkClient) ExternalUserLabelGroups(offset, size int) ([]ExternalUserLabel, error) {
