@@ -117,7 +117,10 @@ func (c *DingTalkClient) httpRequest(path string, params url.Values, requestData
 		content, err := ioutil.ReadAll(resp.Body)
 		fmt.Printf("response: %s\n", content)
 		if err == nil {
-			json.Unmarshal(content, responseData)
+			err = json.Unmarshal(content, responseData)
+			if err != nil {
+				return err
+			}
 			return responseData.checkError()
 		}
 	} else {
