@@ -213,10 +213,10 @@ func (c *DingTalkClient) ExternalUserList(offset, size int) ([]ExternalUser, err
 		Labels []int `json:"labelIds"`
 		StateCode string `json:"stateCode"`
 		Company string `json:"companyName"`
-		Title string
-		Email string
-		Address string
-		Remark string
+		Title string `json:"title"`
+		Email string `json:"email"`
+		Address string `json:"address"`
+		Remark string `json:"remark"`
 		SharedUsers []string `json:"shareUserIds"`
 		SharedDepts []int `json:"shareDeptIds"`
 	}
