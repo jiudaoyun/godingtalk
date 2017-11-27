@@ -198,7 +198,6 @@ func (c *DingTalkClient) CreateExternalUser(euser *ExternalUser) (userID string,
 	if err != nil {
 		return "", err
 	}
-	fmt.Printf("userid: %s\n", rep.UserID)
 	euser.UserID = rep.UserID
 	userID = rep.UserID
 	return
