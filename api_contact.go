@@ -188,9 +188,7 @@ func (c *DingTalkClient) UseridByUnionId(unionid string) (string, error) {
 func (c *DingTalkClient) CreateExternalUser(euser *ExternalUser) (userID string, err error) {
 	var rep struct {
 		TaobaoOAPIResponse
-		DingtalkCorpExtAddResponse struct{
-			UserID string `json:"userid"`
-		} `json:"dingtalk_corp_ext_add_response"`
+		UserID string `json:"userid"`
 	}
 
 	d, _ := json.Marshal(euser)
@@ -200,8 +198,10 @@ func (c *DingTalkClient) CreateExternalUser(euser *ExternalUser) (userID string,
 	if err != nil {
 		return "", err
 	}
-	euser.UserID = rep.DingtalkCorpExtAddResponse.UserID
-	return euser.UserID, nil
+	fmt.Printf("userid: %s\n", rep.UserID)
+	euser.UserID = rep.UserID
+	userID = rep.UserID
+	return
 }
 
 func (c *DingTalkClient) ExternalUserList(offset, size int) ([]ExternalUser, error) {
@@ -274,7 +274,7 @@ func (c *DingTalkClient) ExternalUserLabelGroups(offset, size int) ([]ExternalUs
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("labels: %s\n", rep.Result)
+	// fmt.Printf("labels: %s\n", rep.Result)
 	var result []ExternalUserLabelGroup
 	err = json.Unmarshal([]byte(rep.Result), &result)
 	if err != nil {
